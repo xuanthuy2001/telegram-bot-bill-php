@@ -57,7 +57,12 @@ class BillHandler
         $data = $this->gemini->analyzeBill($imageData, $mime);
 
         if (!$data) {
-            $this->bot->sendMessage($chatId, '❌ Gemini AI không phân tích được. Vui lòng gửi ảnh rõ hơn.');
+            $this->bot->sendMessage($chatId, '❌ Gemini AI không phân tích được. Vui lòng thử lại.');
+            return;
+        }
+
+        if (isset($data['error'])) {
+            $this->bot->sendMessage($chatId, '❌ ' . $data['error']);
             return;
         }
 
