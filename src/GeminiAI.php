@@ -3,7 +3,7 @@
 class GeminiAI
 {
     private string $apiKey;
-    private string $endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+    private string $endpoint = 'https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-fast-generate-001';
 
     public function __construct()
     {
