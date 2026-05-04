@@ -52,6 +52,13 @@ class GeminiAI
         ]);
 
         $res  = curl_exec($ch);
+        $response = curl_exec($ch);
+        file_put_contents('gemini_debug.txt', $response . PHP_EOL, FILE_APPEND);
+        $result = json_decode($response, true);
+        $rawText = $result['candidates'][0]['content']['parts'][0]['text'] ?? 'Không lấy được text';
+
+// Gửi tin nhắn này về Telegram để bạn đọc trực tiếp
+sendMessage($chatId, "Dữ liệu thô từ Gemini: " . $rawText);
         $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
