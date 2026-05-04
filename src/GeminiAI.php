@@ -100,40 +100,36 @@ class GeminiAI
 
     private function getPrompt(): string
     {
-        return <<<PROMPT
-Bạn là chuyên gia OCR phân tích bill/hóa đơn tài chính.
-Hãy phân tích ảnh này và xác định đây là loại bill gì, sau đó trích xuất thông tin.
+        $p  = "You are an expert OCR for financial documents. Analyze the image.
 
-Nếu là BILL CHUYỂN KHOẢN (bank transfer), trả về JSON:
-{
-  "loai": "chuyen_khoan",
-  "nguoi_gui": "tên người/tài khoản gửi",
-  "nguoi_nhan": "tên người/tài khoản nhận",
-  "ngay_chuyen": "dd/mm/yyyy hoặc dd/mm/yyyy hh:mm",
-  "noi_dung": "nội dung/mô tả chuyển khoản",
-  "so_tien": 0
-}
+";
+        $p .= "Bill may be in ANY language (Vietnamese, Korean, English, etc.).
 
-Nếu là BILL TÍNH TIỀN / HÓA ĐƠN MUA HÀNG (invoice/receipt), trả về JSON:
-{
-  "loai": "tinh_tien",
-  "ngay_mua": "dd/mm/yyyy",
-  "items": [
-    {
-      "ten_san_pham": "tên sản phẩm hoặc dịch vụ",
-      "so_luong": 1,
-      "don_gia": 0,
-      "thanh_tien": 0
-    }
-  ]
-}
+";
+        $p .= "CASE 1 - BANK TRANSFER - return ONLY this JSON:
+";
+        $p .= '{"loai":"chuyen_khoan","nguoi_gui":"","nguoi_nhan":"","ngay_chuyen":"","noi_dung":"","so_tien":0}' . "
 
-Nếu không thể xác định: { "loai": "khong_xac_dinh", "ly_do": "lý do" }
+";
+        $p .= "CASE 2 - SHOPPING RECEIPT - return ONLY this JSON:
+";
+        $p .= '{"loai":"tinh_tien","ngay_mua":"dd/mm/yyyy","items":[{"ten_san_pham":"name","so_luong":1,"don_gia":0,"thanh_tien":0}]}' . "
 
-QUAN TRỌNG:
-- Chỉ trả về JSON thuần túy, không có markdown, không có giải thích
-- so_tien, don_gia, thanh_tien là số nguyên (VNĐ), không có dấu phẩy
-- Nếu không rõ thông tin nào thì để chuỗi rỗng "" hoặc 0
-PROMPT;
+";
+        $p .= "CASE 3 - Cannot determine:
+";
+        $p .= '{"loai":"khong_xac_dinh","ly_do":"reason"}' . "
+
+";
+        $p .= "STRICT RULES:
+";
+        $p .= "- Output ONLY raw JSON. No markdown, no text before or after
+";
+        $p .= "- All monetary values must be plain integers (no commas, no symbols)
+";
+        $p .= "- For Korean receipts: translate product names to Vietnamese
+";
+        $p .= "- Unknown fields: use empty string or 0";
+        return $p;
     }
 }
