@@ -125,6 +125,7 @@ class GeminiAI
 ";
         $p .= "- Output ONLY raw JSON. No markdown, no text before or after
 ";
+        $p .= " - Do NOT include markdown code blocks like ```json.";
         $p .= "- All monetary values must be plain integers (no commas, no symbols)
 ";
         $p .= "- For Korean receipts: translate product names to Vietnamese
